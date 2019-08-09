@@ -6,7 +6,8 @@
 **Goals**: 
 1) Access and download HCP Lifespan Pilot Data
 2) Run HCP preprocessing pipelines using a docker container on AWS
-3) Use neuropythy to retrieve and visualize age-related differences in structural properties like cortical thickness.\
+3) Use neuropythy to retrieve and visualize age-related differences in structural properties like cortical thickness.
+
 **How to get involved**: Suggestions for other types of structural analysis (gyrification, TI/T2 differences) and functional analysis (resting state, tasks) are welcome. We look forward to analyzing the HCP-D and HCP-A datasets in the near future!
 
 
