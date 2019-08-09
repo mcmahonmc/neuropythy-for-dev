@@ -2,7 +2,7 @@
 
 **Project url(s)**: [Neuropythy for Dev](http://github.com/mcmahonmc/neuropythy-for-dev)
 
-**Contributors**: [Maya Rosen](https://github.com/mayalrosen), [Kendra Seaman](https://github.com/klsea), [Aarti Nair](https://github.com/aartinair11),[Megan McMahon](https://github.com/mcmahonmc), [Leehyun Yoon](https://github.com/ehyun1990)
+**Contributors**: [Maya Rosen](https://github.com/mayalrosen), [Kendra Seaman](https://github.com/klsea), [Aarti Nair](https://github.com/aartinair11),[Megan McMahon](https://github.com/mcmahonmc), [Leehyun Yoon](https://github.com/ehyun1990), and [Noah Benson](https://github.com/noahbenson)
 
 **Description of project**: Use [neuropythy](https://github.com/noahbenson/neuropythy) to visualize developmental changes in brain structure in participants from the [HCP Lifespan Pilot Study.](https://www.humanconnectome.org/lifespan-studies)
 
