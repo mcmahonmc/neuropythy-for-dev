@@ -8,7 +8,7 @@ Contributors: Maya Rosen, Kendra Seaman, Aarti Nair, Megan McMahon, Leehyun Yoon
 
 Description of project: Use [neuropythy](https://github.com/noahbenson/neuropythy) to visualize developmental changes in brain structure.
 
-We used [HCP Lifespan Pilot Data](https://www.humanconnectome.org/lifespan-studies)
+We used [HCP Lifespan Pilot Data.](https://www.humanconnectome.org/lifespan-studies)
 
 How to get involved: Help?
 
