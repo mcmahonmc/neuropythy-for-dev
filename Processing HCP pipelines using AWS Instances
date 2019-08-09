@@ -1,0 +1,65 @@
+1)	Download HCP
+    a)Because we didn’t have access to the  full dataset we downloaded the HCP lifepsan pilot data (https://www.humanconnectome.org/lifespan-studies) which contains 27 subjects aged 8 - 65. 
+    
+	b)Put your data in BIDS format: https://github.com/bids-standard/bids-starter-kit/wiki/The-BIDS-folder-hierarchy.
+      i)Because the HCP data contains nifitis we wrote a  bash script to put the data in BIDS format (though if you have DICOMS there are existing scripts to do this e.g. heudiconv. 
+      ii)sh bids_conv.sh LS2001
+
+		export bids_dir=/home/ubuntu/BIDS
+
+		PARTIC=$1
+		##Find raw dicom directories
+		anat_raw_t1 =`find '/home/ubuntu/raw/HCP-LifeSpan-Pilot/'$PARTIC'' -iname '*_T1w_MPR1_gdc.nii.gz'`
+		anat_raw_t2 =`find '/home/ubuntu/raw/HCP-LifeSpan-Pilot/'$PARTIC'' -iname '*_T2w_SR1_gdc.nii.gz'`
+
+		partic=`echo $PARTIC | tr '[:upper:]' '[:lower:]'`
+		anat_t1_file = "sub-"$partic"_T1w.nii.gz"
+		anat_t2_file = "sub-"$partic"_T2w.nii.gz"
+
+		if [ ! -d "$bids_dir"/"sub-"$partic""/anat ] && [ ! -z "$ANAT_RAW" ]; then
+    	mkdir -p "$bids_dir"/"sub-"$partic""/anat
+    	cp $anat_raw_t1 "$bids_dir/sub-$partic/anat/$anat_t1_file"
+    	cp $anat_raw_t2 "$bids_dir/sub-$partic/anat/$anat_t2_file"
+
+2)	Run HCP Pipelines
+	a)Launch an AWS instance (follow instructions here: https://neurohackademy.github.io/cloud101_aws/). 
+		i)Step 1: We used “Deep Learning AMI (Ubuntu) Version 24.0 - ami-0944c173745e93dff”. This was the first AMI that came up when we searched for “Docker” in community AMIs.
+		ii)Step 2: We used an x1e.xlarge instance type and changed the storage to 1000 GiB. 
+		iii)Step 3: Make sure to include S3 bucket to store outputs.
+		iv)Step 4: Create key and save .pem file on local machine. 
+		 v)chmod 400 neuropythy-for-dev.pem
+		vi)	Step 5: Copy the command line code from AWS (EC2 instance -> Connect button) for future reference (It will be an ssh command).
+	
+	b)	Create a run.sh file that pulls from the bids/hcppipeline, runs PreFreeSurfer, FreeSurfer, and PostFreeSurfer, dump output into an output directory, then copy that output to the s3
+		i)Ours looked like this:
+		
+		#! /bin/bash                                                                                                	 
+		docker run -ti --rm -v "$HOME/BIDS":/bids_dir -v "$HOME/outputs":/output bids/hcppipelines --participant_label $1 --n_cpus 4 --stages PreFreeSurfer FreeSurfer PostFreeSurfer --license_key YOUR_FREESURFER_LICENSE_KEY /bids_dir /output participant
+
+		aws s3 cp $HOME/outputs/sub-$1 s3://neurohack-neuropythy-for-dev/
+
+	c)	Create an AMI image. 
+		i)Follow the directions here: https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/tkv-create-ami-from-instance.html. It took about 50 minutes for our image to be created :D 
+		ii)AMI Images are listed on the EC2 Dashboard under “Snapshots” and “AMI”s on the left sidebar. It is named “npy-for-dev-orig”
+
+	d)	Launch a new E2 instance using our AMI image.
+		i)From the navigation bar on the left, choose AMIs.
+		ii)Select our AMI instance, “npy-for-dev-orig2” in the middle and click “Launch”. (Be careful! The old image is there and it’s called npy-for-dev-orig)
+		iii)Configure Instance Type: We used an x1e.xlarge (r5.4xlarge) instance type and changed the storage to 1000 GiB. 
+		iv)Configure Instance Details: Make sure to include S3 bucket to store outputs.
+		v)Add tags: 1) Name  - username provided by Ariel
+				    2) Owner - username provided by Ariel
+		vi)Security Group - Select neurohack-SG
+		vii)Review and launch: Use existing .pem file on local machine. 
+		viii)Copy the command line code from AWS (EC2 instance -> Connect button) for future reference (It will be an ssh command; default is root@ - change to ubuntu@).
+			 Something like: ssh -i "neuropythy-for-dev.pem" ubuntu@ec2-18-191-190-92.us-east-2.compute.amazonaws.com
+		ix)Ssh into the instance.
+		x)Run the following commands:
+			(1)	sudo apt update
+			(2)	sudo apt upgrade
+			(3)	sudo apt install awscli
+		xi)Delete the #participant.tsv# file inside the BIDS folder (it’s throwing off BIDS validation)
+			(1)	cd BIDS/
+			(2)	rm #participants.tsv#
+			(3)	cd ..
+		xii)Type ‘./run.sh’ followed by the subject #
