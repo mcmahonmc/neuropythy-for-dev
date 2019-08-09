@@ -1,9 +1,9 @@
 1)	Download HCP
-    a)Because we didn’t have access to the  full dataset we downloaded the HCP lifepsan pilot data (https://www.humanconnectome.org/lifespan-studies) which contains 27 subjects aged 8 - 65. 
+    	a)Because we didn’t have access to the  full dataset we downloaded the HCP lifepsan pilot data (https://www.humanconnectome.org/lifespan-studies) which contains 27 subjects aged 8 - 65. 
     
 	b)Put your data in BIDS format: https://github.com/bids-standard/bids-starter-kit/wiki/The-BIDS-folder-hierarchy.
-      i)Because the HCP data contains nifitis we wrote a  bash script to put the data in BIDS format (though if you have DICOMS there are existing scripts to do this e.g. heudiconv. 
-      ii)sh bids_conv.sh LS2001
+      		i)Because the HCP data contains nifitis we wrote a  bash script to put the data in BIDS format (though if you have DICOMS there are existing scripts to do this e.g. heudiconv. 
+     		ii)sh bids_conv.sh LS2001
 
 		export bids_dir=/home/ubuntu/BIDS
 
@@ -22,7 +22,7 @@
     	cp $anat_raw_t2 "$bids_dir/sub-$partic/anat/$anat_t2_file"
 
 2)	Run HCP Pipelines
-	a)Launch an AWS instance (follow instructions here: https://neurohackademy.github.io/cloud101_aws/). 
+	a)	Launch an AWS instance (follow instructions here: https://neurohackademy.github.io/cloud101_aws/). 
 		i)Step 1: We used “Deep Learning AMI (Ubuntu) Version 24.0 - ami-0944c173745e93dff”. This was the first AMI that came up when we searched for “Docker” in community AMIs.
 		ii)Step 2: We used an x1e.xlarge instance type and changed the storage to 1000 GiB. 
 		iii)Step 3: Make sure to include S3 bucket to store outputs.
