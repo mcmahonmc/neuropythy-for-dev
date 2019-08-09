@@ -11,6 +11,8 @@
 2) Run HCP preprocessing pipelines using a docker container on AWS
 3) Use neuropythy to retrieve and visualize age-related differences in structural properties like cortical thickness.
 
+**Documentation**: Instructions for AWS, HCP pipelines, BIDS conversion, etc. available [here](https://github.com/mcmahonmc/neuropythy-for-dev/blob/master/docs/Processing%20HCP%20pipelines%20using%20AWS%20Instances)
+
 **How to get involved**: Suggestions for other types of structural analysis (gyrification, TI/T2 differences) and functional analysis (resting state, tasks) are welcome. We look forward to analyzing the HCP-D and HCP-A datasets in the near future!
 
 
